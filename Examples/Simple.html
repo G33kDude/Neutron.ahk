@@ -131,6 +131,29 @@
     .keys>div.active {
       background: MediumSeaGreen;
     }
+
+    /* https://stackoverflow.com/a/17406564 */
+    fieldset {
+      margin-bottom: 1em;
+      margin-top: 1.5em;
+      border: 1px solid silver;
+      border-radius: 0.35em;
+      padding-top: 1em;
+      box-sizing: border-box;
+    }
+
+    legend {
+      background: white;
+    }
+
+    fieldset>legend {
+      float: left;
+      margin-top: -1.5em;
+    }
+
+    fieldset>legend+* {
+      clear: both;
+    }
   </style>
 </head>
 
@@ -202,11 +225,11 @@
         <div class="clearfix">
           <div class="w-50">
             <label for="firstName">First Name</label>
-            <input type="text" id="firstName" placeholder="John">
+            <input type="text" id="firstName" placeholder="John" required>
           </div>
           <div class="w-50">
             <label for="lastName">Last Name</label>
-            <input type="text" id="lastName" placeholder="Smith">
+            <input type="text" id="lastName" placeholder="Smith" required>
           </div>
         </div>
         <div>
@@ -234,8 +257,8 @@
         <div class="clearfix">
           <div class="w-50">
             <label for="state">State</label>
-            <select id="state">
-              <option selected>Choose...</option>
+            <select id="state" required>
+              <option value="" selected>Choose...</option>
               <option>Confusion</option>
             </select>
           </div>
@@ -251,6 +274,79 @@
         <div>
           <button type="submit">Submit</button>
         </div>
+      </form>
+      <p>
+        You can also use forms where there are multiple options for a value,
+        such as by a set of checkboxes or multi-select. Radio selections work
+        too!
+      </p>
+      <form onsubmit="ahk.Submit2(event)">
+        <fieldset>
+          <legend>Favorite Foods</legend>
+          <div class="clearfix">
+            <div class="w-50">
+              <input type="checkbox" id="hamburgers" value="hamburgers" name="food">
+              <label for="hamburgers">Hamburgers</label>
+            </div>
+            <div class="w-50">
+              <input type="checkbox" id="hotdogs" value="hotdogs" name="food">
+              <label for="hotdogs">Hot Dogs</label>
+            </div>
+          </div>
+          <div class="clearfix">
+            <div class="w-50">
+              <input type="checkbox" id="fries" value="fries" name="food">
+              <label for="fries">French Fries</label>
+            </div>
+            <div class="w-50">
+              <input type="checkbox" id="cookies" value="cookies" name="food">
+              <label for="cookies">Cookies</label>
+            </div>
+          </div>
+          <div class="clearfix">
+            <div class="w-50">
+              <input type="checkbox" id="pizza" value="pizza" name="food">
+              <label for="pizza">Pizza</label>
+            </div>
+            <div class="w-50">
+              <input type="checkbox" id="chicken" value="chicken" name="food">
+              <label for="chicken">Chicken</label>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Preferred Method of Contact</legend>
+          <div class="clearfix">
+            <div class="w-50">
+              <input type="radio" id="contactEmail" value="email" name="contact" checked>
+              <label for="contactEmail">Email</label>
+            </div>
+            <div class="w-50">
+              <input type="radio" id="contactPhone" value="phone" name="contact">
+              <label for="contactPhone">Phone</label>
+            </div>
+          </div>
+          <div class="clearfix">
+            <div class="w-50">
+              <input type="radio" id="contactEmail" value="email" name="contact">
+              <label for="contactEmail">Snail Mail</label>
+            </div>
+            <div class="w-50">
+              <input type="radio" id="contactIPoAC" value="IPoAC" name="contact">
+              <label for="contactIPoAC">RFC 1149</label>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Favorite Languages</legend>
+          <select id="favLangs" multiple style="border: none; padding: 0; margin: 0;">
+            <option value="ahk">AutoHotkey</option>
+            <option value="py">Python</option>
+            <option value="rlx">Relax</option>
+            <option value="cpp">C++</option>
+          </select>
+        </fieldset>
+        <button type="submit">Submit</button>
       </form>
     </div>
   </div>

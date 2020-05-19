@@ -291,6 +291,52 @@ class NeutronWindow
 		return new this.Enumerable(htmlCollection)
 	}
 	
+	; Given an HTML Form Element, construct a FormData object
+	;
+	; Parameters:
+	;   formElement - The HTML Form Element
+	;   useIdAsName - When a field's name is blank, use it's ID instead
+	;
+	; Returns: A FormData object
+	;
+	GetFormData(formElement, useIdAsName:=True)
+	{
+		formData := new this.FormData()
+		
+		for i, field in this.Each(formElement.elements)
+		{
+			; Discover the field's name
+			name := ""
+			try ; fieldset elements error when reading the name field
+				name := field.name
+			if (name == "" && useIdAsName)
+				name := field.id
+			
+			; Filter against fields which should be omitted
+			if (name == "" || field.disabled
+				|| field.type ~= "^file|reset|submit|button$")
+				continue
+			
+			; Handle select-multiple variants
+			if (field.type == "select-multiple")
+			{
+				for j, option in this.Each(field.options)
+					if (option.selected)
+						formData.add(name, option.value)
+				continue
+			}
+			
+			; Filter against unchecked checkboxes and radios
+			if (field.type ~= "^checkbox|radio$" && !field.checked)
+				continue
+			
+			; Return the field values
+			formData.add(name, field.value)
+		}
+		
+		return formData
+	}
+	
 	
 	; --- Nested Classes ---
 	
@@ -328,6 +374,54 @@ class NeutronWindow
 				return False
 			i := this.i
 			elem := this.collection.item(this.i++)
+			return True
+		}
+	}
+	
+	; An OrderedDict style object designed for holding form data.
+	; Allows duplicate keys.
+	class FormData
+	{
+		names := []
+		values := []
+		
+		; Add a field to the FormData structure
+		Add(name, value)
+		{
+			this.names.Push(name)
+			this.values.Push(value)
+		}
+		
+		; Get an array of all values associated with a name
+		All(name)
+		{
+			values := []
+			for i, v in this.names
+				if (v == name)
+					values.Push(this.values[i])
+			return values
+		}
+		
+		; Allow access of a value with bracket notation
+		; Retrieves the nth value with the given name
+		__Get(name, n := 1)
+		{
+			for i, v in this.names
+				if (v == name && !--n)
+					return this.values[i]
+		}
+		
+		; Allow enumeration in the order fields were added
+		_NewEnum()
+		{
+			return {"i": 0, "base": this}
+		}
+		Next(ByRef name, ByRef value)
+		{
+			if (++this.i > this.names.length())
+				return False
+			name := this.names[this.i]
+			value := this.values[this.i]
 			return True
 		}
 	}
