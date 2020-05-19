@@ -1,0 +1,257 @@
+<head>
+  <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /*** Window Title ***/
+
+    header {
+      width: 100%;
+      display: flex;
+      background: #F0F0F0;
+      font-family: Segoe UI;
+      font-size: 9pt;
+    }
+
+    .title-bar {
+      padding: 0.35em 0.5em;
+      flex-grow: 1;
+    }
+
+    .title-btn {
+      padding: 0.35em 1.0em;
+      cursor: hand;
+      vertical-align: bottom;
+      font-family: Webdings;
+      font-size: 11pt;
+    }
+
+    .title-btn:hover {
+      background: rgba(0, 0, 0, .2);
+    }
+
+    .title-btn-close:hover {
+      background: #dc3545;
+    }
+
+    /*** Window Client Area ***/
+
+    .main {
+      font-size: 12pt;
+      padding: 1em;
+      overflow: auto;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+    }
+
+    @media screen and (min-width: 500px) {
+      .w-50 {
+        box-sizing: border-box;
+        float: left;
+        width: 48%;
+        margin-left: 4%;
+      }
+
+      .w-50:first-child {
+        margin-left: 0;
+      }
+    }
+
+    input[type=text],
+    input[type=email],
+    input[type=number],
+    input[type=password],
+    select {
+      width: 100%;
+      padding: 0.75em;
+      margin-bottom: 1em;
+
+      border: 1px solid silver;
+      border-radius: 0.35em;
+
+      box-sizing: border-box;
+    }
+
+    label {
+      display: inline-block;
+      margin-bottom: 0.5em;
+      font-weight: bold;
+      font-size: 0.8em;
+    }
+
+    button {
+      width: 100%;
+      background-color: MediumSeaGreen;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    input[type=submit]:hover {
+      background-color: #45a049;
+    }
+
+    .clearfix:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    .keys {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+    .keys>div {
+      width: 100px; height: 100px;
+      margin: 10px; padding: 0;
+      background: silver;
+      text-align: center;
+      font-size: 90px;
+      color: white;
+      border-radius: 1rem;
+    }
+    .keys>div.active {
+      background: MediumSeaGreen;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Title Bar -->
+  <header>
+    <span class="title-bar" onmousedown="neutron.DragTitleBar()">Neutron</span>
+    <span class="title-btn" onclick="neutron.Minimize()">0</span>
+    <span class="title-btn" onclick="neutron.Maximize()">1</span>
+    <span class="title-btn title-btn-close" onclick="neutron.Close()">r</span>
+  </header>
+
+  <!-- Main content area -->
+  <div class="main">
+    <div class="container">
+      <h1>Welcome to Neutron</h1>
+      <p>
+        Placeholder Text
+      </p>
+
+      <h2>Trigger AHK by page events</h2>
+      <p>
+        The simplest way of integrating a page to your script is by linking a
+        button's click event to a function in your script. This can be easily
+        achieved using the button's <code>onclick</code> attribute.
+      </p>
+      <div class="clearfix">
+        <button class="w-50" onclick="ahk.Example1_Button(event)">Button #1</button>
+        <button class="w-50" onclick="ahk.Example1_Button(event)">Button #2</button>
+      </div>
+      <p>
+        Click events aren't the only type that can be handled. The box below
+        responds to mouse movement events and gets automatically updated with
+        the cursor position by AutoHotkey.
+      </p>
+      <div
+        style="border: 1px solid black; width: 100%; text-align: center; padding: 1em 0;"
+        onmousemove="ahk.Example1_MouseMove(event)"
+        onmouseout="ahk.Example1_MouseLeave(event)">
+        Mouse over this area!
+      </div>
+
+      <h2>Update page by Hotkey</h2>
+      <p>
+        Try pressing the keys 1 through 4 on your keyboard!
+      </p>
+      <div class="keys">
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+        <div>4</div>
+      </div>
+      <p>
+        This example demonstrates the following tasks:
+      </p>
+      <ul>
+        <li>Limit a hotkey's activity to the Neutron window.</li>
+        <li>Find a collection of elements using CSS selectors.</li>
+        <li>Iterate over the collection with <code>Neutron.Each</code></li>
+        <li>Update an element's CSS class string.</li>
+      </ul>
+
+      <h2>Pass form data to AHK</h2>
+      <p>
+        This example shows how you would collect form data from Neutron.
+      </p>
+      <form onsubmit="ahk.Submit(event)">
+        <div class="clearfix">
+          <div class="w-50">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" placeholder="John">
+          </div>
+          <div class="w-50">
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" placeholder="Smith">
+          </div>
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="example@contoso.com">
+        </div>
+        <div>
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="hunter2">
+        </div>
+        <div class="clearfix">
+          <div class="w-50">
+            <label for="address">Address</label>
+            <input type="text" id="address" placeholder="123 Central Avenue">
+          </div>
+          <div class="w-50">
+            <label for="address2">Address 2</label>
+            <input type="text" id="address2" placeholder="Apartment 42">
+          </div>
+        </div>
+        <div>
+          <label for="city">City</label>
+          <input type="text" id="city" placeholder="LEGO&reg; City">
+        </div>
+        <div class="clearfix">
+          <div class="w-50">
+            <label for="state">State</label>
+            <select id="state">
+              <option selected>Choose...</option>
+              <option>Confusion</option>
+            </select>
+          </div>
+          <div class="w-50">
+            <label for="zip">Zip</label>
+            <input type="number" id="zip" placeholder="1337">
+          </div>
+        </div>
+        <div>
+          <input type="checkbox" id="remember">
+          <label for="remember">Remember me</label>
+        </div>
+        <div>
+          <button type="submit">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
