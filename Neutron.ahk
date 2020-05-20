@@ -202,7 +202,7 @@ class NeutronWindow
 			{
 				; Clean up all our circular references so that the object may be
 				; garbage collected.
-
+				
 				for i, message in this.LISTENERS
 					OnMessage(message, this.bound._OnMessage, 0)
 				this.bound := []
@@ -277,18 +277,24 @@ class NeutronWindow
 	}
 	
 	
-	; --- Methods ---
+	; --- Instance Methods ---
 	
+	; Triggers window dragging. Call this on mouse click down. Best used as your
+	; title bar's onmousedown attribute.
 	DragTitleBar()
 	{
 		PostMessage, this.WM_NCLBUTTONDOWN, 2, 0,, % "ahk_id" this.hWnd
 	}
 	
+	; Minimizes the Neutron window. Best used in your title bar's minimize
+	; button's onclick attribute.
 	Minimize()
 	{
 		Gui, % this.hWnd ":Minimize"
 	}
 	
+	; Maximize the Neutron window. Best used in your title bar's maximize
+	; button's onclick attribute.
 	Maximize()
 	{
 		if DllCall("IsZoomed", "UPtr", this.hWnd)
@@ -297,16 +303,23 @@ class NeutronWindow
 			Gui, % this.hWnd ":Maximize"
 	}
 	
+	; Closes/hides the Neutron window. Best used in your title bar's close
+	; button's onclick attribute.
 	Close()
 	{
 		Gui, % this.hWnd ":Hide"
 	}
 	
+	; Destroys the Neutron window. Do this when you would no longer want to
+	; re-show the window, as it will free the memory taken up by the GUI and
+	; ActiveX control. This method is best used either as your title bar's close
+	; button's onclick attribute, or in a custom window close routine.
 	Destroy()
 	{
 		Gui, % this.hWnd ":Destroy"
 	}
-
+	
+	; Shows a hidden/closed Neutron window.
 	Show()
 	{
 		Gui, % this.hWnd ":Show"
@@ -315,6 +328,20 @@ class NeutronWindow
 	
 	; --- Static Methods ---
 	
+	; Given an HTML Collection (or other JavaScript array), return an enumerator
+	; that will iterate over its items.
+	;
+	; Parameters:
+	;     htmlCollection - The JavaScript array to be iterated over
+	;
+	; Returns: An Enumerable object
+	;
+	; Example:
+	;
+	; neutron := new NeutronWindow("<body><p>A</p><p>B</p><p>C</p></body>")
+	; for i, element in neutron.Each(neutron.body.children)
+	;     MsgBox, % i ": " element.innerText
+	;
 	Each(htmlCollection)
 	{
 		return new this.Enumerable(htmlCollection)
@@ -327,6 +354,19 @@ class NeutronWindow
 	;   useIdAsName - When a field's name is blank, use it's ID instead
 	;
 	; Returns: A FormData object
+	;
+	; Example:
+	;
+	; neutron := new NeutronWindow("<form>"
+	; . "<input type='text' name='field1' value='One'>"
+	; . "<input type='text' name='field2' value='Two'>"
+	; . "<input type='text' name='field3' value='Three'>"
+	; . "</form>")
+	; formElement := neutron.doc.querySelector("form") ; Grab 1st form on page
+	; formData := neutron.GetFormData(formElement) ; Get form data
+	; MsgBox, % formData.field2 ; Pull a single field
+	; for name, element in formData ; Iterate all fields
+	;     MsgBox, %name%: %element%
 	;
 	GetFormData(formElement, useIdAsName:=True)
 	{
@@ -369,6 +409,14 @@ class NeutronWindow
 	
 	; --- Nested Classes ---
 	
+	; Proxies method calls to AHK function calls, binding a given value to the
+	; first parameter of the target function.
+	;
+	; For internal use only.
+	;
+	; Parameters:
+	;   parent - The value to bind
+	;
 	class Dispatch
 	{
 		__New(parent)
@@ -383,6 +431,14 @@ class NeutronWindow
 		}
 	}
 	
+	; Enumerator class that enumerates the items of an HTMLCollection (or other
+	; JavaScript array).
+	;
+	; Best accessed through the .Each() helper method.
+	;
+	; Parameters:
+	;   htmlCollection - The HTMLCollection to be enumerated.
+	;
 	class Enumerable
 	{
 		i := 0
@@ -407,21 +463,48 @@ class NeutronWindow
 		}
 	}
 	
-	; An OrderedDict style object designed for holding form data.
-	; Allows duplicate keys.
+	; A collection similar to an OrderedDict designed for holding form data.
+	; This collection allows duplicate keys and enumerates key value pairs in
+	; the order they were added.
 	class FormData
 	{
 		names := []
 		values := []
 		
-		; Add a field to the FormData structure
+		; Add a field to the FormData structure.
+		;
+		; Parameters:
+		;   name - The form field name associated with the value
+		;   value - The value of the form field
+		;
+		; Returns: Nothing
+		;
 		Add(name, value)
 		{
 			this.names.Push(name)
 			this.values.Push(value)
 		}
 		
-		; Get an array of all values associated with a name
+		; Get an array of all values associated with a name.
+		;
+		; Parameters:
+		;   name - The form field name associated with the values
+		;
+		; Returns: An array of values
+		;
+		; Example:
+		;
+		; fd := new NeutronWindow.FormData()
+		; fd.Add("foods", "hamburgers")
+		; fd.Add("foods", "hotdogs")
+		; fd.Add("foods", "pizza")
+		; fd.Add("colors", "red")
+		; fd.Add("colors", "green")
+		; fd.Add("colors", "blue")
+		; for i, food in fd.All("foods")
+		;     out .= i ": " food "`n"
+		; MsgBox, %out%
+		;
 		All(name)
 		{
 			values := []
@@ -431,8 +514,18 @@ class NeutronWindow
 			return values
 		}
 		
-		; Allow access of a value with bracket notation
-		; Retrieves the nth value with the given name
+		; Meta-function to allow direct access of field values using either dot
+		; or bracket notation. Can retrieve the nth item associated with a given
+		; name by passing more than one value in when bracket notation.
+		;
+		; Example:
+		;
+		; fd := new NeutronWindow.FormData()
+		; fd.Add("foods", "hamburgers")
+		; fd.Add("foods", "hotdogs")
+		; MsgBox, % fd.foods ; hamburgers
+		; MsgBox, % fd["foods", 2] ; hotdogs
+		;
 		__Get(name, n := 1)
 		{
 			for i, v in this.names
@@ -440,7 +533,19 @@ class NeutronWindow
 					return this.values[i]
 		}
 		
-		; Allow enumeration in the order fields were added
+		; Allow iteration in the order fields were added, instead of a normal
+		; object's alphanumeric order of iteration.
+		;
+		; Example:
+		;
+		; fd := new NeutronWindow.FormData()
+		; fd.Add("z", "3")
+		; fd.Add("y", "2")
+		; fd.Add("x", "1")
+		; for name, field in fd
+		;     out .= name ": " field ","
+		; MsgBox, %out% ; z: 3, y: 2, x: 1
+		;
 		_NewEnum()
 		{
 			return {"i": 0, "base": this}
