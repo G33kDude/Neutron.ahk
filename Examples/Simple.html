@@ -48,28 +48,47 @@
     /*** Window Client Area ***/
 
     .main {
+      /* Some settings for everything in the client area */
       font-size: 12pt;
       padding: 1em;
       overflow: auto;
     }
 
     .container {
+      /* Only render items in the center 600px of the client area */
       max-width: 600px;
       margin: auto;
     }
 
-    @media screen and (min-width: 500px) {
-      .w-50 {
-        box-sizing: border-box;
-        float: left;
-        width: 48%;
-        margin-left: 4%;
-      }
+    /*** Bootstrap Style Flexbox Utilities ***/
 
-      .w-50:first-child {
-        margin-left: 0;
+    .row {
+      /* A row is basically just a flexbox container */
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .w-50 {
+      /* Fill almost half the row, leaving a bit of margin */
+      width: 48%;
+    }
+
+    .w-100 {
+      /* Fill the entire row */
+      width: 100%;
+    }
+
+    @media screen and (max-width: 500px) {
+      /* When the window gets shrunk */
+
+      .w-50 {
+        /* Reflow half-size elements to fill the entire row */
+        width: 100%;
       }
     }
+
+    /*** Generic Form Styling ***/
 
     input[type=text],
     input[type=email],
@@ -108,30 +127,6 @@
       background-color: #45a049;
     }
 
-    .clearfix:after {
-      content: "";
-      display: table;
-      clear: both;
-    }
-
-    .keys {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-    }
-    .keys>div {
-      width: 100px; height: 100px;
-      margin: 10px; padding: 0;
-      background: silver;
-      text-align: center;
-      font-size: 90px;
-      color: white;
-      border-radius: 1rem;
-    }
-    .keys>div.active {
-      background: MediumSeaGreen;
-    }
-
     /* https://stackoverflow.com/a/17406564 */
     fieldset {
       margin-bottom: 1em;
@@ -154,6 +149,30 @@
     fieldset>legend+* {
       clear: both;
     }
+
+    /*** Giant Key Styling ***/
+
+    .keys {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+
+    .keys>div {
+      width: 100px;
+      height: 100px;
+      margin: 10px;
+      padding: 0;
+      background: silver;
+      text-align: center;
+      font-size: 90px;
+      color: white;
+      border-radius: 1rem;
+    }
+
+    .keys>div.active {
+      background: MediumSeaGreen;
+    }
   </style>
 </head>
 
@@ -170,10 +189,16 @@
   <!-- Main content area -->
   <div class="main">
     <div class="container">
+
       <h1>Welcome to Neutron</h1>
       <p>
-        Placeholder Text
+        Neutron provides a powerful set of tools for combining AutoHotkey with
+        custom HTML user interfaces. Below are a few examples of ways you can
+        leverage Neutron to your advantage.
       </p>
+
+
+      <!-- Example #1 -->
 
       <h2>Trigger AHK by page events</h2>
       <p>
@@ -181,7 +206,7 @@
         button's click event to a function in your script. This can be easily
         achieved using the button's <code>onclick</code> attribute.
       </p>
-      <div class="clearfix">
+      <div class="row">
         <button class="w-50" onclick="ahk.Example1_Button(event)">Button #1</button>
         <button class="w-50" onclick="ahk.Example1_Button(event)">Button #2</button>
       </div>
@@ -190,12 +215,13 @@
         responds to mouse movement events and gets automatically updated with
         the cursor position by AutoHotkey.
       </p>
-      <div
-        style="border: 1px solid black; width: 100%; text-align: center; padding: 1em 0;"
-        onmousemove="ahk.Example1_MouseMove(event)"
-        onmouseout="ahk.Example1_MouseLeave(event)">
+      <div style="border: 1px solid black; width: 100%; text-align: center; padding: 1em 0;"
+        onmousemove="ahk.Example1_MouseMove(event)" onmouseout="ahk.Example1_MouseLeave(event)">
         Mouse over this area!
       </div>
+
+
+      <!-- Example #2 -->
 
       <h2>Update page by Hotkey</h2>
       <p>
@@ -217,12 +243,15 @@
         <li>Update an element's CSS class string.</li>
       </ul>
 
+
+      <!-- Example #3 -->
+
       <h2>Pass form data to AHK</h2>
       <p>
         This example shows how you would collect form data from Neutron.
       </p>
       <form onsubmit="ahk.Submit(event)">
-        <div class="clearfix">
+        <div class="row">
           <div class="w-50">
             <label for="firstName">First Name</label>
             <input type="text" id="firstName" placeholder="John" required>
@@ -231,16 +260,14 @@
             <label for="lastName">Last Name</label>
             <input type="text" id="lastName" placeholder="Smith" required>
           </div>
-        </div>
-        <div>
-          <label for="email">Email</label>
-          <input type="email" id="email" placeholder="example@contoso.com">
-        </div>
-        <div>
-          <label for="password">Password</label>
-          <input type="password" id="password" placeholder="hunter2">
-        </div>
-        <div class="clearfix">
+          <div class="w-100">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="example@contoso.com">
+          </div>
+          <div class="w-100">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="hunter2">
+          </div>
           <div class="w-50">
             <label for="address">Address</label>
             <input type="text" id="address" placeholder="123 Central Avenue">
@@ -249,12 +276,10 @@
             <label for="address2">Address 2</label>
             <input type="text" id="address2" placeholder="Apartment 42">
           </div>
-        </div>
-        <div>
-          <label for="city">City</label>
-          <input type="text" id="city" placeholder="LEGO&reg; City">
-        </div>
-        <div class="clearfix">
+          <div class="w-100">
+            <label for="city">City</label>
+            <input type="text" id="city" placeholder="LEGO&reg; City">
+          </div>
           <div class="w-50">
             <label for="state">State</label>
             <select id="state" required>
@@ -266,24 +291,23 @@
             <label for="zip">Zip</label>
             <input type="number" id="zip" placeholder="1337">
           </div>
+          <div class="w-100">
+            <input type="checkbox" id="remember">
+            <label for="remember">Remember me</label>
+          </div>
         </div>
-        <div>
-          <input type="checkbox" id="remember">
-          <label for="remember">Remember me</label>
-        </div>
-        <div>
-          <button type="submit">Submit</button>
-        </div>
+        <button type="submit">Submit</button>
       </form>
       <p>
         You can also use forms where there are multiple options for a value,
         such as by a set of checkboxes or multi-select. Radio selections work
         too!
       </p>
+
       <form onsubmit="ahk.Submit2(event)">
         <fieldset>
           <legend>Favorite Foods</legend>
-          <div class="clearfix">
+          <div class="row">
             <div class="w-50">
               <input type="checkbox" id="hamburgers" value="hamburgers" name="food">
               <label for="hamburgers">Hamburgers</label>
@@ -292,8 +316,6 @@
               <input type="checkbox" id="hotdogs" value="hotdogs" name="food">
               <label for="hotdogs">Hot Dogs</label>
             </div>
-          </div>
-          <div class="clearfix">
             <div class="w-50">
               <input type="checkbox" id="fries" value="fries" name="food">
               <label for="fries">French Fries</label>
@@ -302,8 +324,6 @@
               <input type="checkbox" id="cookies" value="cookies" name="food">
               <label for="cookies">Cookies</label>
             </div>
-          </div>
-          <div class="clearfix">
             <div class="w-50">
               <input type="checkbox" id="pizza" value="pizza" name="food">
               <label for="pizza">Pizza</label>
@@ -311,29 +331,6 @@
             <div class="w-50">
               <input type="checkbox" id="chicken" value="chicken" name="food">
               <label for="chicken">Chicken</label>
-            </div>
-          </div>
-        </fieldset>
-        <fieldset>
-          <legend>Preferred Method of Contact</legend>
-          <div class="clearfix">
-            <div class="w-50">
-              <input type="radio" id="contactEmail" value="email" name="contact" checked>
-              <label for="contactEmail">Email</label>
-            </div>
-            <div class="w-50">
-              <input type="radio" id="contactPhone" value="phone" name="contact">
-              <label for="contactPhone">Phone</label>
-            </div>
-          </div>
-          <div class="clearfix">
-            <div class="w-50">
-              <input type="radio" id="contactEmail" value="email" name="contact">
-              <label for="contactEmail">Snail Mail</label>
-            </div>
-            <div class="w-50">
-              <input type="radio" id="contactIPoAC" value="IPoAC" name="contact">
-              <label for="contactIPoAC">RFC 1149</label>
             </div>
           </div>
         </fieldset>
@@ -346,8 +343,30 @@
             <option value="cpp">C++</option>
           </select>
         </fieldset>
+        <fieldset>
+          <legend>Preferred Method of Contact</legend>
+          <div class="row">
+            <div class="w-50">
+              <input type="radio" id="contactEmail" value="email" name="contact" checked>
+              <label for="contactEmail">Email</label>
+            </div>
+            <div class="w-50">
+              <input type="radio" id="contactPhone" value="phone" name="contact">
+              <label for="contactPhone">Phone</label>
+            </div>
+            <div class="w-50">
+              <input type="radio" id="contactEmail" value="email" name="contact">
+              <label for="contactEmail">Snail Mail</label>
+            </div>
+            <div class="w-50">
+              <input type="radio" id="contactIPoAC" value="IPoAC" name="contact">
+              <label for="contactIPoAC">RFC 1149</label>
+            </div>
+          </div>
+        </fieldset>
         <button type="submit">Submit</button>
       </form>
-    </div>
-  </div>
+
+    </div> <!-- /container -->
+  </div> <!-- /main -->
 </body>
