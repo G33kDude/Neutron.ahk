@@ -6,13 +6,14 @@ class NeutronWindow
 	static VERSION := 0.0
 	
 	; Windows Messages
+	, WM_DESTROY := 0x02
+	, WM_SIZE := 0x05
 	, WM_NCCALCSIZE := 0x83
 	, WM_NCHITTEST := 0x84
 	, WM_NCLBUTTONDOWN := 0xA1
 	, WM_KEYDOWN := 0x100
 	, WM_MOUSEMOVE := 0x200
 	, WM_LBUTTONDOWN := 0x201
-	, WM_SIZE := 0x05
 	
 	; Non-client hit test values (WM_NCHITTEST)
 	, HT_VALUES := [[13, 12, 14], [10, 1, 11], [16, 15, 17]]
@@ -62,13 +63,15 @@ class NeutronWindow
 	__New(html)
 	{
 		static wb
+		this.LISTENERS := [this.WM_DESTROY, this.WM_SIZE, this.WM_NCCALCSIZE
+		, this.WM_KEYDOWN, this.WM_LBUTTONDOWN]
 		
 		; Create necessary circular references
 		this.bound := {}
 		this.bound._OnMessage := this._OnMessage.Bind(this)
 		
 		; Bind message handlers
-		for i, message in [this.WM_NCCALCSIZE, this.WM_LBUTTONDOWN, this.WM_SIZE, this.WM_KEYDOWN]
+		for i, message in this.LISTENERS
 			OnMessage(message, this.bound._OnMessage)
 		
 		; Create and save the GUI
@@ -146,6 +149,12 @@ class NeutronWindow
 		, "Ptr") ; LONG_PTR
 	}
 	
+	; Show an alert for debugging purposes when the class gets garbage collected
+	; __Delete()
+	; {
+	; 	MsgBox, __Delete
+	; }
+	
 	
 	; --- Event Handlers ---
 	
@@ -188,6 +197,15 @@ class NeutronWindow
 				this.h := h := lParam<<32>>48
 				
 				GuiControl, %hWnd%:Move, % this.hWB, w%w% h%h%
+			}
+			else if (Msg == this.WM_DESTROY)
+			{
+				; Clean up all our circular references so that the object may be
+				; garbage collected.
+
+				for i, message in this.LISTENERS
+					OnMessage(message, this.bound._OnMessage, 0)
+				this.bound := []
 			}
 		}
 		else if (hWnd == this.hIES)
@@ -281,8 +299,19 @@ class NeutronWindow
 	
 	Close()
 	{
-		; TODO: Function Stub
+		Gui, % this.hWnd ":Hide"
 	}
+	
+	Destroy()
+	{
+		Gui, % this.hWnd ":Destroy"
+	}
+
+	Show()
+	{
+		Gui, % this.hWnd ":Show"
+	}
+	
 	
 	; --- Static Methods ---
 	
