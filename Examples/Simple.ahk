@@ -11,6 +11,8 @@ neutron := new NeutronWindow(html)
 ; Instead of using neutron's built in Close method, make the window close action
 ; call our Func_ExitApp.
 neutron.Close := Func("Func_ExitApp")
+
+neutron.Show("w800 h600")
 return
 
 Func_ExitApp()

@@ -130,16 +130,16 @@ class NeutronWindow
 		while wb.readyState < 4
 			Sleep, 50
 		
-		; Show the GUI
-		Gui, Show, % "w" this.w "h" this.h
-		
 		; Subclass the rendered Internet Explorer_Server control to intercept
 		; its events, including WM_NCHITTEST and WM_NCLBUTTONDOWN.
 		; Read more here: https://forum.juce.com/t/_/27937
 		; And in the AutoHotkey documentation for RegisterCallback (Example 2)
 		
+		dhw := A_DetectHiddenWindows
+		DetectHiddenWindows, On
 		ControlGet, hWnd, hWnd,, Internet Explorer_Server1, % "ahk_id" this.hWnd
 		this.hIES := hWnd
+		DetectHiddenWindows, %dhw%
 		
 		this.pWndProc := RegisterCallback(this._WindowProc, "", 4, &this)
 		this.pWndProcOld := DllCall("SetWindowLong" (A_PtrSize == 8 ? "Ptr" : "")
