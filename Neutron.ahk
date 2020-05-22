@@ -320,9 +320,25 @@ class NeutronWindow
 	}
 	
 	; Shows a hidden/closed Neutron window.
-	Show()
+	Show(options:="")
 	{
-		Gui, % this.hWnd ":Show"
+		w := RegExMatch(options, "w\s*\K\d+", match) ? match : this.w
+		h := RegExMatch(options, "h\s*\K\d+", match) ? match : this.h
+		
+		; AutoHotkey sizes the window incorrectly, trying to account for borders
+		; that aren't actually there. Call the function AHK uses to offset and
+		; apply the change in reverse to get the actual wanted size.
+		VarSetCapacity(rect, 16, 0)
+		DllCall("AdjustWindowRectEx"
+		, "Ptr", &rect ;  LPRECT lpRect
+		, "UInt", 0x80CE0000 ;  DWORD  dwStyle
+		, "UInt", 0 ;  BOOL   bMenu
+		, "UInt", 0 ;  DWORD  dwExStyle
+		, "UInt") ; BOOL
+		w += NumGet(&rect, 0, "Int")-NumGet(&rect, 8, "Int")
+		h += NumGet(&rect, 4, "Int")-NumGet(&rect, 12, "Int")
+
+		Gui, % this.hWnd ":Show", %options% w%w% h%h%
 	}
 	
 	
