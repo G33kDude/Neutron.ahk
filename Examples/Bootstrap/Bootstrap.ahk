@@ -25,7 +25,7 @@ return
 ; FileInstall all your dependencies, but put the FileInstall lines somewhere
 ; they won't ever be reached. Right below your AutoExecute section is a great
 ; location!
-FileInstall, index.html, index.html
+FileInstall, Bootstrap.html, Bootstrap.html
 FileInstall, bootstrap.min.css, bootstrap.min.css
 FileInstall, bootstrap.min.js, bootstrap.min.js
 FileInstall, jquery.min.js, jquery.min.js
