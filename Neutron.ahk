@@ -60,7 +60,7 @@ class NeutronWindow
 	
 	; --- Construction, Destruction, Meta-Functions ---
 	
-	__New(html)
+	__New(html:="<script></script>")
 	{
 		static wb
 		this.LISTENERS := [this.WM_DESTROY, this.WM_SIZE, this.WM_NCCALCSIZE
@@ -339,6 +339,54 @@ class NeutronWindow
 		h += NumGet(&rect, 4, "Int")-NumGet(&rect, 12, "Int")
 
 		Gui, % this.hWnd ":Show", %options% w%w% h%h%
+	}
+	
+	; Loads an HTML file by name (not path). When running the script uncompiled,
+	; looks for the file in the local directory. When running the script
+	; compiled, looks for the file in the EXE's RCDATA. Files included in your
+	; compiled EXE by FileInstall are stored in RCDATA whether they get
+	; extracted or not. An easy way to get your Neutron resources into a
+	; compiled script, then, is to put FileInstall commands for them right below
+	; the return at the bottom of your AutoExecute section.
+	;
+	; Parameters:
+	;   fileName - The name of the HTML file to load into the Neutron window.
+	;              Make sure to give just the file name, not the full path.
+	;
+	; Returns: nothing
+	;
+	; Example:
+	;
+	; ; AutoExecute Section
+	; neutron := new NeutronWindow()
+	; neutron.Load("index.html")
+	; neutron.Show()
+	; return
+	; FileInstall, index.html, index.html
+	; FileInstall, index.css, index.css
+	;
+	Load(fileName)
+	{
+		; Complete the path based on compiled state
+		if A_IsCompiled
+			url := "res://" this.wnd.encodeURIComponent(A_ScriptFullPath) "/10/" fileName
+		else
+			url := A_WorkingDir "/" fileName
+
+		; Navigate to the calculated file URL
+		this.wb.Navigate(url)
+
+		; Wait for the page to finish loading
+		while this.wb.readyState < 3
+			Sleep, 50
+		
+		; Inject the AHK objects into the JS scope
+		this.wnd.neutron := this
+		this.wnd.ahk := new this.Dispatch(this)
+
+		; Wait for the page to finish loading
+		while this.wb.readyState < 4
+			Sleep, 50
 	}
 	
 	
