@@ -17,7 +17,6 @@ class NeutronWindow
 	
 	; Non-client hit test values (WM_NCHITTEST)
 	, HT_VALUES := [[13, 12, 14], [10, 1, 11], [16, 15, 17]]
-	, HT_CURSORS := [["nw", "n", "ne"], ["w", "", "e"], ["sw", "s", "se"]]
 	
 	; Registry keys
 	, KEY_FBE := "HKEY_CURRENT_USER\Software\Microsoft\Internet Explorer\MAIN"
@@ -337,7 +336,7 @@ class NeutronWindow
 		, "UInt") ; BOOL
 		w += NumGet(&rect, 0, "Int")-NumGet(&rect, 8, "Int")
 		h += NumGet(&rect, 4, "Int")-NumGet(&rect, 12, "Int")
-
+		
 		Gui, % this.hWnd ":Show", %options% w%w% h%h%
 	}
 	
@@ -372,10 +371,10 @@ class NeutronWindow
 			url := "res://" this.wnd.encodeURIComponent(A_ScriptFullPath) "/10/" fileName
 		else
 			url := A_WorkingDir "/" fileName
-
+		
 		; Navigate to the calculated file URL
 		this.wb.Navigate(url)
-
+		
 		; Wait for the page to finish loading
 		while this.wb.readyState < 3
 			Sleep, 50
@@ -383,7 +382,7 @@ class NeutronWindow
 		; Inject the AHK objects into the JS scope
 		this.wnd.neutron := this
 		this.wnd.ahk := new this.Dispatch(this)
-
+		
 		; Wait for the page to finish loading
 		while this.wb.readyState < 4
 			Sleep, 50
@@ -403,6 +402,7 @@ class NeutronWindow
 	; Example:
 	;
 	; neutron := new NeutronWindow("<body><p>A</p><p>B</p><p>C</p></body>")
+	; neutron.Show()
 	; for i, element in neutron.Each(neutron.body.children)
 	;     MsgBox, % i ": " element.innerText
 	;
@@ -426,6 +426,7 @@ class NeutronWindow
 	; . "<input type='text' name='field2' value='Two'>"
 	; . "<input type='text' name='field3' value='Three'>"
 	; . "</form>")
+	; neutron.Show()
 	; formElement := neutron.doc.querySelector("form") ; Grab 1st form on page
 	; formData := neutron.GetFormData(formElement) ; Get form data
 	; MsgBox, % formData.field2 ; Pull a single field
