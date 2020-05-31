@@ -381,7 +381,7 @@ class NeutronWindow
 	
 	; Closes/hides the Neutron window. Best used in your title bar's close
 	; button's onclick attribute.
-	Close()
+	Hide()
 	{
 		Gui, % this.hWnd ":Hide"
 	}
