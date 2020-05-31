@@ -1,6 +1,79 @@
 ﻿
 class NeutronWindow
 {
+	static TEMPLATE := "
+( ; html
+<!DOCTYPE html><html>
+<head>
+
+<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+<style>
+	html, body {
+		width: 100%; height: 100%;
+		margin: 0; padding: 0;
+		font-family: sans-serif;
+	}
+
+	body {
+		display: flex;
+		flex-direction: column;
+	}
+
+	header {
+		width: 100%;
+		display: flex;
+		background: silver;
+		font-family: Segoe UI;
+		font-size: 9pt;
+	}
+
+	.title-bar {
+		padding: 0.35em 0.5em;
+		flex-grow: 1;
+	}
+
+	.title-btn {
+		padding: 0.35em 1.0em;
+		cursor: pointer;
+		vertical-align: bottom;
+		font-family: Webdings;
+		font-size: 11pt;
+	}
+
+	.title-btn:hover {
+		background: rgba(0, 0, 0, .2);
+	}
+
+	.title-btn-close:hover {
+		background: #dc3545;
+	}
+	
+	.main {
+		flex-grow: 1;
+		padding: 0.5em;
+		overflow: auto;
+	}
+</style>
+<style>{}</style>
+
+</head>
+<body>
+
+<header>
+	<span class='title-bar' onmousedown='neutron.DragTitleBar()'>{}</span>
+	<span class='title-btn' onclick='neutron.Minimize()'>0</span>
+	<span class='title-btn' onclick='neutron.Maximize()'>1</span>
+	<span class='title-btn title-btn-close' onclick='neutron.Close()'>r</span>
+</header>
+
+<div class='main'>{}</div>
+
+<script>{}</script>
+
+</body>
+</html>
+)"
+
 	; --- Constants ---
 	
 	static VERSION := 0.0
@@ -59,7 +132,7 @@ class NeutronWindow
 	
 	; --- Construction, Destruction, Meta-Functions ---
 	
-	__New(html:="<script></script>")
+	__New(html:="", css:="", js:="", title:="Neutron")
 	{
 		static wb
 		this.LISTENERS := [this.WM_DESTROY, this.WM_SIZE, this.WM_NCCALCSIZE
@@ -116,6 +189,10 @@ class NeutronWindow
 		; Save the WebBrowser control to reference later
 		this.wb := wb
 		this.hWB := hWB
+
+		; Compute the HTML template if necessary
+		if !(html ~= "i)^<!DOCTYPE")
+			html := Format(this.TEMPLATE, css, title, html, js)
 		
 		; Write the given content to the page
 		this.doc.write(html)
