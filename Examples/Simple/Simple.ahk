@@ -5,8 +5,8 @@ SetBatchLines, -1
 #Include ../../Neutron.ahk
 
 ; Read in the HTML and load it into a Neutron window
-FileRead, html, Simple.html
-neutron := new NeutronWindow(html)
+neutron := new NeutronWindow()
+neutron.Load("Simple.html")
 
 ; Instead of using neutron's built in Close method, make the window close action
 ; call our Func_ExitApp.
@@ -14,6 +14,11 @@ neutron.Close := Func("Func_ExitApp")
 
 neutron.Show("w800 h600")
 return
+
+; FileInstall all your dependencies, but put the FileInstall lines somewhere
+; they won't ever be reached. Right below your AutoExecute section is a great
+; location!
+FileInstall, Simple.html, Simple.html
 
 Func_ExitApp()
 {
