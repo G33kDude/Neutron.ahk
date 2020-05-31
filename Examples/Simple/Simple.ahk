@@ -2,7 +2,7 @@
 SetBatchLines, -1
 
 ; Include the Neutron library
-#Include ../Neutron.ahk
+#Include ../../Neutron.ahk
 
 ; Read in the HTML and load it into a Neutron window
 FileRead, html, Simple.html
