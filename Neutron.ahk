@@ -273,6 +273,8 @@ class NeutronWindow
 				this.h := h := lParam<<32>>48
 				
 				GuiControl, %hWnd%:Move, % this.hWB, w%w% h%h%
+				
+				return 0
 			}
 			else if (Msg == this.WM_DESTROY)
 			{
