@@ -477,6 +477,13 @@ class NeutronWindow
 		return this.doc.querySelectorAll(selector)
 	}
 	
+	; Passthrough method for the Gui command, targeted at the Neutron Window
+	; instance
+	Gui(subCommand, value1:="", value2:="", value3:="")
+	{
+		Gui, % this.hWnd ":" subCommand, %value1%, %value2%, %value3%
+	}
+	
 	
 	; --- Static Methods ---
 	
