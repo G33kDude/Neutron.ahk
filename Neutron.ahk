@@ -379,8 +379,14 @@ class NeutronWindow
 			Gui, % this.hWnd ":Maximize"
 	}
 	
-	; Closes/hides the Neutron window. Best used in your title bar's close
+	; Closes the Neutron window. Best used in your title bar's close
 	; button's onclick attribute.
+	Close()
+	{
+		WinClose, % "ahk_id" this.hWnd
+	}
+	
+	; Hides the Nuetron window.
 	Hide()
 	{
 		Gui, % this.hWnd ":Hide"
@@ -395,7 +401,7 @@ class NeutronWindow
 		Gui, % this.hWnd ":Destroy"
 	}
 	
-	; Shows a hidden/closed Neutron window.
+	; Shows a hidden Neutron window.
 	Show(options:="")
 	{
 		w := RegExMatch(options, "w\s*\K\d+", match) ? match : this.w
