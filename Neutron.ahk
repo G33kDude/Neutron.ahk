@@ -47,7 +47,7 @@ class NeutronWindow
 	.title-btn-close:hover {
 		background: #dc3545;
 	}
-	
+
 	.main {
 		flex-grow: 1;
 		padding: 0.5em;
@@ -73,7 +73,7 @@ class NeutronWindow
 </body>
 </html>
 )"
-
+	
 	; --- Constants ---
 	
 	static VERSION := 0.0
@@ -189,7 +189,7 @@ class NeutronWindow
 		; Save the WebBrowser control to reference later
 		this.wb := wb
 		this.hWB := hWB
-
+		
 		; Compute the HTML template if necessary
 		if !(html ~= "i)^<!DOCTYPE")
 			html := Format(this.TEMPLATE, css, title, html, js)
@@ -558,6 +558,27 @@ class NeutronWindow
 		}
 		
 		return formData
+	}
+	
+	; Given a potentially HTML-unsafe string, return an HTML safe string
+	; https://stackoverflow.com/a/6234804
+	EscapeHTML(unsafe)
+	{
+		unsafe := StrReplace(unsafe, "&", "&amp;")
+		unsafe := StrReplace(unsafe, "<", "&lt;")
+		unsafe := StrReplace(unsafe, ">", "&gt;")
+		unsafe := StrReplace(unsafe, """", "&quot;")
+		unsafe := StrReplace(unsafe, "''", "&#039;")
+		return unsafe
+	}
+	
+	; Wrapper for Format that applies EscapeHTML to each value before passing
+	; them on. Useful for dynamic HTML generation.
+	FormatHTML(formatStr, values*)
+	{
+		for i, value in values
+			values[i] := this.EscapeHTML(value)
+		return Format(formatStr, values*)
 	}
 	
 	
