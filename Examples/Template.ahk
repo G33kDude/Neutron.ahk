@@ -2,7 +2,7 @@
 	This example is designed to show how to use the default Neutron template
 	page. Because it uses the default template, it is also the simplest example
 	to use and tweak as a beginner.
-
+	
 	It is also designed to show how you would apply your own theming to the
 	template without having to modify it directly, by applying CSS styling to
 	the built-in template title bar elements.
@@ -98,12 +98,31 @@ js =
 
 title = Neutron Template Example
 
+; Create a Neutron Window with the given content and save a reference to it in
+; the variable `neutron` to be used later.
 neutron := new NeutronWindow(html, css, js, title)
-neutron.Close := Func("ExitApp")
+
+; Use the Gui method to set a custom label prefix for GUI events. This code is
+; equivalent to the line `Gui, name:+LabelNeutron` for a normal GUI.
+neutron.Gui("+LabelNeutron")
+
+; Show the GUI, with an initial size of 640 x 480. Unlike with a normal GUI
+; this size includes the title bar area, so the "client" area will be slightly
+; shorter vertically than if you were to make this GUI the normal way.
 neutron.Show("w640 h480")
 
+; Set up a timer to demonstrate making dynamic page updates every so often.
 SetTimer, DynamicContent, 100
 return
+
+; The built in GuiClose and GuiEscape event handlers will work with Neutron
+; GUIs. Using them is the current best practice for handling these types of
+; events. Here, we're using the name NeutronClose because the GUI was given
+; a custom label prefix up in the auto-execute section.
+NeutronClose:
+ExitApp
+return
+
 
 Clicked(neutron, event)
 {
@@ -141,9 +160,4 @@ DynamicContent()
 	; Update the page with the new position
 	neutron.doc.getElementById("ahk_x").innerText := x
 	neutron.doc.getElementById("ahk_y").innerText := y
-}
-
-ExitApp()
-{
-	ExitApp
 }
