@@ -1,16 +1,24 @@
-﻿#NoEnv
+﻿/*
+	This example, while named Simple, is not the most simplistic example.
+	Instead, it is designed to demonstrate all of Neutron's built in behavior
+	as a single custom page. It is meant to be simple by comparison to other
+	examples like the Bootstrap example which demonstrate extending Neutron's
+	functionality with third party web frameworks.
+*/
+
+#NoEnv
 SetBatchLines, -1
 
 ; Include the Neutron library
 #Include ../../Neutron.ahk
 
-; Read in the HTML and load it into a Neutron window
+; Create a new NeutronWindow and navigate to our HTML page
 neutron := new NeutronWindow()
 neutron.Load("Simple.html")
 
-; Instead of using neutron's built in Close method, make the window close action
-; call our Func_ExitApp.
-neutron.Close := Func("Func_ExitApp")
+; Use the Gui method to set a custom label prefix for GUI events. This code is
+; equivalent to the line `Gui, name:+LabelNeutron` for a normal GUI.
+neutron.Gui("+LabelNeutron")
 
 ; Insert example 4 table 1 contents
 Ex4_Table1 := [["Apple", 1], ["Orange", 2]]
@@ -38,18 +46,25 @@ for row, data in Ex4_Table2
 	neutron.qs("#ex4_table2>tbody").appendChild(tr)
 }
 
+; Show the GUI, with an initial size of 640 x 480. Unlike with a normal GUI
+; this size includes the title bar area, so the "client" area will be slightly
+; shorter vertically than if you were to make this GUI the normal way.
 neutron.Show("w800 h600")
 return
+
 
 ; FileInstall all your dependencies, but put the FileInstall lines somewhere
 ; they won't ever be reached. Right below your AutoExecute section is a great
 ; location!
 FileInstall, Simple.html, Simple.html
 
-Func_ExitApp()
-{
-	ExitApp
-}
+; The built in GuiClose and GuiEscape event handlers will work with Neutron
+; GUIs. Using them is the current best practice for handling these types of
+; events. Here, we're using the name NeutronClose because the GUI was given
+; a custom label prefix up in the auto-execute section.
+NeutronClose:
+ExitApp
+return
 
 
 ; --- Trigger AHK by page events ---
