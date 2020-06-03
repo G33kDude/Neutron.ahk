@@ -669,8 +669,23 @@ class NeutronWindow
 		
 		__Call(params*)
 		{
-			fname := params.RemoveAt(1)
-			return Func(fname).(this.parent, params*)
+			; Make sure the given name is a function
+			if !(fn := Func(params[1]))
+				throw Exception("Unknown function: " params[1])
+			
+			; Make sure enough parameters were given
+			if (params.length() < fn.MinParams)
+				throw Exception("Too few parameters given to " fn.Name ": " params.length())
+			
+			; Make sure too many parameters weren't given
+			if (params.length() > fn.MaxParams && !fn.IsVariadic)
+				throw Exception("Too many parameters given to " fn.Name ": " params.length())
+			
+			; Change first parameter from the function name to the neutron instance
+			params[1] := this.parent
+			
+			; Call the function
+			return fn.Call(params*)
 		}
 	}
 	
