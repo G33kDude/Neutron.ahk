@@ -6,13 +6,6 @@ with AutoHotkey. It leverages the Trident engine, known for its use in Internet
 Explorer, because of its deep integration with the Microsoft Windows operating
 system and its wide availability across systems.
 
-![Neutron Window](https://i.imgur.com/hKecfvb.png)
-
-Listen and watch about Neutron on
-[YouTube](https://www.youtube.com/watch?v=cTRcOG28hYI), from the May 2020
-webinar recording. This was for a very early version of Neutron but it still
-contains many of the core concepts.
-
 Notable features:
 
 * Create GUIs with HTML, CSS, JS, and AHK all working together.
@@ -22,6 +15,13 @@ Notable features:
 * Make better looking interfaces easily with web frameworks like Bootstrap.
 * Compile resources into your script and access them without extracting. Very
   useful for including images in the script!
+
+![Neutron Window](https://i.imgur.com/hKecfvb.png)
+
+Listen and watch about Neutron on
+[YouTube](https://www.youtube.com/watch?v=cTRcOG28hYI), from the May 2020
+webinar recording. This was for a very early version of Neutron but it still
+contains many of the core concepts.
 
 ## Getting Started with Neutron
 
@@ -256,3 +256,7 @@ restrictions may apply.
 ```js
 /*! jQuery v3.5.1 | (c) JS Foundation and other contributors | jquery.org/license */
 ```
+
+---
+
+## [Download Neutron](https://github.com/G33kDude/Neutron.ahk/releases)
