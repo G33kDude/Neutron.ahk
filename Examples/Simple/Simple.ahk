@@ -46,7 +46,7 @@ for row, data in Ex4_Table2
 	neutron.qs("#ex4_table2>tbody").appendChild(tr)
 }
 
-; Show the GUI, with an initial size of 640 x 480. Unlike with a normal GUI
+; Show the GUI, with an initial size of 800 x 600. Unlike with a normal GUI
 ; this size includes the title bar area, so the "client" area will be slightly
 ; shorter vertically than if you were to make this GUI the normal way.
 neutron.Show("w800 h600")
