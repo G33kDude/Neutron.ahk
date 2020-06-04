@@ -60,6 +60,7 @@ Gui, name:+LabelNamedGui
 return
 NamedGuiClose:
 NamedGuiEscape:
+NamedGuiDropFiles:
 MsgBox, Events!
 return
 ; Neutron syntax:
@@ -67,6 +68,7 @@ name.Gui("+LabelNamedGui")
 return
 NamedGuiClose:
 NamedGuiEscape:
+NamedGuiDropFiles:
 MsgBox, Events!
 return
 

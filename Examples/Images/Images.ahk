@@ -32,9 +32,9 @@ FileInstall, Image3.html, Image3.html
 FileInstall, Image3.jpg, Image3.jpg
 FileInstall, Images.css, Images.css
 
-; The built in GuiClose and GuiEscape event handlers will work with Neutron
-; GUIs. Using them is the current best practice for handling these types of
-; events.
+; The built in GuiClose, GuiEscape, and GuiDropFiles event handlers will work
+; with Neutron GUIs. Using them is the current best practice for handling these
+; types of events.
 GuiClose:
 ExitApp
 return

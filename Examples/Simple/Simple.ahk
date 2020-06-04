@@ -58,10 +58,10 @@ return
 ; location!
 FileInstall, Simple.html, Simple.html
 
-; The built in GuiClose and GuiEscape event handlers will work with Neutron
-; GUIs. Using them is the current best practice for handling these types of
-; events. Here, we're using the name NeutronClose because the GUI was given
-; a custom label prefix up in the auto-execute section.
+; The built in GuiClose, GuiEscape, and GuiDropFiles event handlers will work
+; with Neutron GUIs. Using them is the current best practice for handling these
+; types of events. Here, we're using the name NeutronClose because the GUI was
+; given a custom label prefix up in the auto-execute section.
 NeutronClose:
 ExitApp
 return

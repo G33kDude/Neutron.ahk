@@ -39,6 +39,10 @@ FileInstall, bootstrap.min.css, bootstrap.min.css
 FileInstall, bootstrap.min.js, bootstrap.min.js
 FileInstall, jquery.min.js, jquery.min.js
 
+; The built in GuiClose, GuiEscape, and GuiDropFiles event handlers will work
+; with Neutron GUIs. Using them is the current best practice for handling these
+; types of events. Here, we're using the name NeutronClose because the GUI was
+; given a custom label prefix up in the auto-execute section.
 NeutronClose:
 ExitApp
 return

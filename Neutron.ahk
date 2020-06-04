@@ -279,6 +279,10 @@ class NeutronWindow
 		, "Int", -4            ; int      nIndex (GWLP_WNDPROC)
 		, "Ptr", this.pWndProc ; LONG_PTR dwNewLong
 		, "Ptr") ; LONG_PTR
+		
+		; Stop the WebBrowser control from consuming file drag and drop events
+		this.wb.RegisterAsDropTarget := False
+		DllCall("ole32\RevokeDragDrop", "UPtr", this.hIES)
 	}
 	
 	; Show an alert for debugging purposes when the class gets garbage collected
