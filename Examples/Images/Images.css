@@ -1,0 +1,76 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  width: 100%;
+  display: flex;
+  background: silver;
+  font-family: Segoe UI;
+  font-size: 9pt;
+}
+
+.title-bar {
+  padding: 0.35em 0.5em;
+  flex-grow: 1;
+}
+
+.title-btn {
+  padding: 0.35em 1.0em;
+  cursor: pointer;
+  vertical-align: bottom;
+  font-family: Webdings;
+  font-size: 11pt;
+}
+
+.title-btn:hover {
+  background: rgba(0, 0, 0, .2);
+}
+
+.title-btn-close:hover {
+  background: #dc3545;
+}
+
+.main {
+  flex-grow: 1;
+  padding: 0.5em;
+  overflow: auto;
+}
+
+nav {
+  background: silver;
+  display: flex;
+  padding: 0 0.25em;
+}
+
+nav>a {
+  margin: 0 0.25em;
+  padding: 0.5em;
+  background-color: #ddd;
+  color: black;
+  text-decoration: none;
+  border-radius: 0.25em 0.25em 0 0;
+}
+
+nav>a.active {
+  background: white;
+}
+
+p {
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+  border-radius: 0.25em;
+  margin: 0.5em 0;
+}

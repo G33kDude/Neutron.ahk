@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+
+  <!--
+    The IE Compatibility flag, while not always necessary, makes sure your page
+    will always load in IE11+ rendering mode instead of being limited to IE7
+    features and behaviors. While IE11 is still relatively old as a rendering
+    engine, it supports the most fundamental parts needed for modern webpages to
+    function correctly.
+
+    Neutron will do its best to enable IE11+ rendering mode regardless of this
+    tag, but in current releases pages will not render correctly when compiled
+    unless this tag is present. Because of that and other edge cases, any page
+    you write to load in Neutron should contain this meta tag.
+  -->
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+
+  <link href="Images.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <header>
+    <span class='title-bar' onmousedown='neutron.DragTitleBar()'>Image 3 - Merging neutron stars</span>
+    <span class='title-btn' onclick='neutron.Minimize()'>0</span>
+    <span class='title-btn' onclick='neutron.Maximize()'>1</span>
+    <span class='title-btn title-btn-close' onclick='neutron.Close()'>r</span>
+  </header>
+
+  <nav onmousedown='neutron.DragTitleBar()'>
+    <a href="Image1.html">Image 1</a>
+    <a href="Image2.html">Image 2</a>
+    <a href="Image3.html" class="active">Image 3</a>
+  </nav>
+
+  <div class='main'>
+    <p>
+      Artist’s impression of merging neutron stars (University of Warwick/Mark Garlick)<br>
+      https://www.eso.org/public/images/eso1733s/ (CC BY 4.0)
+    </p>
+    <img src="Image3.jpg" alt="Artist’s impression of merging neutron stars">
+  </div>
+
+</body>
+
+</html>

@@ -167,6 +167,14 @@ Complexity: 1 / 5
 > template without having to modify it directly, by applying CSS styling to the
 > built-in template title bar elements.
 
+### Images
+
+Complexity: 2 / 5
+
+> This example demonstrates displaying images through a tabbed multi-page
+> interface. When compiled, this image gallery will stay contained in the exe
+> file without having to extract the image resources to use them on the page.
+
 ### Simple
 
 Complexity: 2 / 5
