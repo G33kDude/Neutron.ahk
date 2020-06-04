@@ -243,6 +243,9 @@ class NeutronWindow
 		this.wb := wb
 		this.hWB := hWB
 		
+		; Connect the web browser's event stream to a new event handler object
+		ComObjConnect(this.wb, new this.WBEvents(this))
+		
 		; Compute the HTML template if necessary
 		if !(html ~= "i)^<!DOCTYPE")
 			html := Format(this.TEMPLATE, css, title, html, js)
@@ -686,6 +689,29 @@ class NeutronWindow
 			
 			; Call the function
 			return fn.Call(params*)
+		}
+	}
+	
+	; Handles Web Browser events
+	; https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa768283%28v%3dvs.85%29
+	;
+	; For internal use only
+	;
+	; Parameters:
+	;   parent - An instance of the Neutron class
+	;
+	class WBEvents
+	{
+		__New(parent)
+		{
+			this.parent := parent
+		}
+		
+		DocumentComplete(wb)
+		{
+			; Inject the AHK objects into the JS scope
+			wb.document.parentWindow.neutron := this.parent
+			wb.document.parentWindow.ahk := new this.parent.Dispatch(this.parent)
 		}
 	}
 	
