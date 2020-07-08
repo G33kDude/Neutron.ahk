@@ -430,6 +430,7 @@ class NeutronWindow
 		}
 		
 		; Otherwise (since above didn't return), pass all unhandled events to the original WindowProc.
+		Critical, Off
 		return DllCall("CallWindowProc"
 		, "Ptr", this.pWndProcOld ; WNDPROC lpPrevWndFunc
 		, "Ptr", hWnd             ; HWND    hWnd
