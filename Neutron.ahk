@@ -379,7 +379,7 @@ class NeutronWindow
 			{
 				; Accelerator handling code from AutoHotkey Installer
 				
-				if (Chr(wParam) ~= "[A-Z]" || wParam = 0x74) ; Disable Ctrl+O/L/F/N and F5.
+				if (Chr(wParam) ~= "[BD-UWY-Z]" || wParam = 0x74) ; Disable Ctrl+O/L/F/N and F5.
 					return
 				Gui +OwnDialogs ; For threadless callbacks which interrupt this.
 				pipa := ComObjQuery(this.wb, "{00000117-0000-0000-C000-000000000046}")
