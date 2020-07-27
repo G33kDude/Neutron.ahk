@@ -368,6 +368,7 @@ class NeutronWindow
 				
 				for i, message in this.LISTENERS
 					OnMessage(message, this.bound._OnMessage, 0)
+				ComObjConnect(this.wb)
 				this.bound := []
 			}
 		}
