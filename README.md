@@ -207,7 +207,7 @@ and image files. Using one of the following methods, your Neutron script can
 be compiled into a portable exe that contains all these dependencies internally,
 without needing to extract them to a temporary directory for use.
 
-### Using compiler directives *(requires AutoHotkey v1.1.33+)*
+### A. Using compiler directives *(requires AutoHotkey v1.1.33+)*
 1. Add a `;@Ahk2Exe-AddResource *10 FileName` directive for each dependent file.
     * For example: `;@Ahk2Exe-AddResource *10 index.html`
     * Dependant files can be in any sub directory 
@@ -219,7 +219,7 @@ without needing to extract them to a temporary directory for use.
     `<link href="index.css" rel="stylesheet">`,
     `<img src="image.jpg">`
 
-### Using FileInstall
+### B. Using FileInstall
 1. Any dependent files must be in the same directory as your AutoHotkey script
    file.
 2. Reference dependent files by name only, without any path portion.
