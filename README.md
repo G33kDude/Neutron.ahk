@@ -202,13 +202,24 @@ Complexity: 4 / 5
 > scripts first.
 
 ## Compiling Neutron Scripts
-
 Some Neutron scripts may require many dependencies, such as HTML, CSS, JS, SVG,
-and image files. By following a few rules, your Neutron script can be compiled
-into a portable exe that contains all these dependencies internally, without
-needing to extract them to a temporary directory for use. Follow these rules to
-make your script work best when compiled:
+and image files. Using one of the following methods, your Neutron script can 
+be compiled into a portable exe that contains all these dependencies internally,
+without needing to extract them to a temporary directory for use.
 
+### Using compiler directives *(requires AutoHotkey v1.1.33+)*
+1. Add a `;@Ahk2Exe-AddResource *10 FileName` directive for each dependent file.
+    * For example: `;@Ahk2Exe-AddResource *10 index.html`
+    * Dependant files can be in any sub directory 
+      `;@Ahk2Exe-AddResource *10 %A_ScriptDir%\css\styles.css`.
+    * It doesn't matter where the directive line is in the script.
+2. Reference dependent files by name only, without any path portion.
+   * In AHK: `neutron.Load("index.html")`
+   * In HTML: `<script src="index.js">`,
+    `<link href="index.css" rel="stylesheet">`,
+    `<img src="image.jpg">`
+
+### Using FileInstall
 1. Any dependent files must be in the same directory as your AutoHotkey script
    file.
 2. Reference dependent files by name only, without any path portion.
@@ -216,7 +227,7 @@ make your script work best when compiled:
    * In HTML: `<script src="index.js">`,
      `<link href="index.css" rel="stylesheet">`,
      `<img src="image.jpg">`
-3. Have a FileInstall for each dependent file somewhere in the script. Put this
+3. Have a `FileInstall` for each dependent file somewhere in the script. Put this
    somewhere that it won't be reached, such as just below the `return` after
    your auto-execute section.
 
