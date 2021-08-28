@@ -235,6 +235,19 @@ When you do this, the dependent files will be saved into the EXE's RCDATA
 resources. Neutron's `Load()` method will detect when your script is compiled
 and read the dependencies from there instead of looking for files on the system.
 
+## Debugging Neutron
+
+Along with traditional methods of debugging AutoHotkey scripts, you can access
+the IE developer tools by invoking the Microsoft utility `IEChooser.exe`. This
+tool, located at `%SystemRoot%\System32\F12\IEChooser.exe`, allows you to choose
+an IE frame embedded into any application and attach the regular web debugger to
+it.
+
+This tool is part of the Windows 10 suite of debugging utilities introduced with
+Legacy Edge, and designed for debugging applications such as IE-based Office
+Add-ins. It also works pretty well for AHK scripts with embedded browser
+controls.
+
 ## Copyright Disclaimer
 
 The core components of this library have been released under the MIT license,
