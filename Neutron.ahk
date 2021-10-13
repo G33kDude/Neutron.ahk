@@ -1,4 +1,4 @@
-﻿;
+;
 ; Neutron.ahk v1.0.0
 ; Copyright (c) 2020 Philip Taylor (known also as GeekDude, G33kDude)
 ; https://github.com/G33kDude/Neutron.ahk
@@ -132,12 +132,15 @@ class NeutronWindow
 	
 	; Undoucmented Accent API constants
 	; https://withinrafael.com/2018/02/02/adding-acrylic-blur-to-your-windows-10-apps-redstone-4-desktop-apps/
+	, ACCENT_ENABLE_GRADIENT := 1
 	, ACCENT_ENABLE_BLURBEHIND := 3
 	, WCA_ACCENT_POLICY := 19
 	
 	; Other constants
 	, EXE_NAME := A_IsCompiled ? A_ScriptName : StrSplit(A_AhkPath, "\").Pop()
 	
+	; OS minor version
+	, OS_MINOR_VER := StrSplit(A_OSVersion, ".")[3]
 	
 	; --- Instance Variables ---
 	
@@ -265,7 +268,12 @@ class NeutronWindow
 		VarSetCapacity(wcad, A_PtrSize+A_PtrSize+4, 0)
 		NumPut(this.WCA_ACCENT_POLICY, &wcad, 0, "Int")
 		VarSetCapacity(accent, 16, 0)
-		NumPut(this.ACCENT_ENABLE_BLURBEHIND, &accent, 0, "Int")
+		; Use ACCENT_ENABLE_GRADIENT on Windows 11 to fix window dragging issues
+		if(this.OS_MINOR_VER >= 22000)
+			AccentState:= this.ACCENT_ENABLE_GRADIENT
+		else
+			AccentState:= this.ACCENT_ENABLE_BLURBEHIND
+		NumPut(AccentState, &accent, 0, "Int")
 		NumPut(&accent, &wcad, A_PtrSize, "Ptr")
 		NumPut(16, &wcad, A_PtrSize+A_PtrSize, "Int")
 		DllCall("SetWindowCompositionAttribute", "UPtr", hWnd, "UPtr", &wcad)
