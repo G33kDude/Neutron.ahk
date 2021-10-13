@@ -132,12 +132,15 @@ class NeutronWindow
 	
 	; Undoucmented Accent API constants
 	; https://withinrafael.com/2018/02/02/adding-acrylic-blur-to-your-windows-10-apps-redstone-4-desktop-apps/
+	, ACCENT_ENABLE_GRADIENT := 1
 	, ACCENT_ENABLE_BLURBEHIND := 3
 	, WCA_ACCENT_POLICY := 19
 	
 	; Other constants
 	, EXE_NAME := A_IsCompiled ? A_ScriptName : StrSplit(A_AhkPath, "\").Pop()
 	
+	; OS minor version
+	, OS_MINOR_VER := StrSplit(A_OSVersion, ".")[3]
 	
 	; --- Instance Variables ---
 	
@@ -265,7 +268,12 @@ class NeutronWindow
 		VarSetCapacity(wcad, A_PtrSize+A_PtrSize+4, 0)
 		NumPut(this.WCA_ACCENT_POLICY, &wcad, 0, "Int")
 		VarSetCapacity(accent, 16, 0)
-		NumPut(this.ACCENT_ENABLE_BLURBEHIND, &accent, 0, "Int")
+		; Use ACCENT_ENABLE_GRADIENT on Windows 11 to fix window dragging issues
+		if(this.OS_MINOR_VER >= 22000)
+			AccentState:= this.ACCENT_ENABLE_GRADIENT
+		else
+			AccentState:= this.ACCENT_ENABLE_BLURBEHIND
+		NumPut(AccentState, &accent, 0, "Int")
 		NumPut(&accent, &wcad, A_PtrSize, "Ptr")
 		NumPut(16, &wcad, A_PtrSize+A_PtrSize, "Int")
 		DllCall("SetWindowCompositionAttribute", "UPtr", hWnd, "UPtr", &wcad)
@@ -503,7 +511,6 @@ class NeutronWindow
 		, "Ptr") ; LRESULT
 	}
 	
-	
 	; --- Instance Methods ---
 	
 	; Triggers window dragging. Call this on mouse click down. Best used as your
@@ -553,7 +560,7 @@ class NeutronWindow
 	}
 	
 	; Shows a hidden Neutron window.
-	Show(options:="")
+	Show(options:="",title:="")
 	{
 		w := RegExMatch(options, "w\s*\K\d+", match) ? match : this.w
 		h := RegExMatch(options, "h\s*\K\d+", match) ? match : this.h
@@ -571,7 +578,7 @@ class NeutronWindow
 		w += NumGet(&rect, 0, "Int")-NumGet(&rect, 8, "Int")
 		h += NumGet(&rect, 4, "Int")-NumGet(&rect, 12, "Int")
 		
-		Gui, % this.hWnd ":Show", %options% w%w% h%h%
+		Gui, % this.hWnd ":Show", %options% w%w% h%h%, %title%
 	}
 	
 	; Loads an HTML file by name (not path). When running the script uncompiled,
@@ -641,7 +648,21 @@ class NeutronWindow
 		Gui, % this.hWnd ":" subCommand, %value1%, %value2%, %value3%
 	}
 	
-	
+	; Changes the window AccentState to ACCENT_ENABLE_GRADIENT
+	; and sets the specified fill color
+	SetWindowFillColor(colorHex:="000000")
+	{
+		colorHex := this._HexToABGR(colorHex)
+		VarSetCapacity(wcad, A_PtrSize+A_PtrSize+4, 0)
+		NumPut(this.WCA_ACCENT_POLICY, &wcad, 0, "Int")
+		VarSetCapacity(accent, 16, 0)
+		NumPut(this.ACCENT_ENABLE_GRADIENT, &accent, 0, "Int")
+		NumPut(colorHex, &accent, 8, "Int")
+		NumPut(&accent, &wcad, A_PtrSize, "Ptr")
+		NumPut(16, &wcad, A_PtrSize+A_PtrSize, "Int")
+		DllCall("SetWindowCompositionAttribute", "UPtr", this.hWnd, "UPtr", &wcad)
+	}
+
 	; --- Static Methods ---
 	
 	; Given an HTML Collection (or other JavaScript array), return an enumerator
@@ -745,6 +766,16 @@ class NeutronWindow
 		return Format(formatStr, values*)
 	}
 	
+	; Converts any hex-formatted RGB color to ABGR format,
+	; colorHex can be passed as "#ff00ff" or as 0xff00ff
+	_HexToABGR(colorHex)
+	{
+		colorHex := StrReplace(colorHex, "0x", "")
+		colorHex := StrReplace(colorHex, "#", "")
+		return "0xff" SubStr(colorHex, 5, 2) 
+			. SubStr(colorHex, 3 , 2) 
+			. SubStr(colorHex, 1 , 2)
+	}
 	
 	; --- Nested Classes ---
 	
