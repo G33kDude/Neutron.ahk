@@ -511,6 +511,29 @@ class NeutronWindow
 		, "Ptr") ; LRESULT
 	}
 	
+	; Converts any hex-formatted RGB color to ABGR format,
+	; colorHex can be passed as "#ff00ff" or as 0xff00ff
+	_HexToABGR(colorHex){
+		colorHex := StrReplace(colorHex, "0x", "")
+		colorHex := StrReplace(colorHex, "#", "")
+		return "0xff" SubStr(colorHex, 5, 2) 
+			. SubStr(colorHex, 3 , 2) 
+			. SubStr(colorHex, 1 , 2)
+	}
+	
+	; Changes the window aceent policy to ACCENT_ENABLE_GRADIENT
+	; and sets the specified fill color
+	SetWindowFillColor(colorHex:="000000"){
+		colorHex := this._HexToABGR(colorHex)
+		VarSetCapacity(wcad, A_PtrSize+A_PtrSize+4, 0)
+		NumPut(this.WCA_ACCENT_POLICY, &wcad, 0, "Int")
+		VarSetCapacity(accent, 16, 0)
+		NumPut(this.ACCENT_ENABLE_GRADIENT, &accent, 0, "Int")
+		NumPut(colorHex, &accent, 8, "Int")
+		NumPut(&accent, &wcad, A_PtrSize, "Ptr")
+		NumPut(16, &wcad, A_PtrSize+A_PtrSize, "Int")
+		DllCall("SetWindowCompositionAttribute", "UPtr", this.hWnd, "UPtr", &wcad)
+	}
 	
 	; --- Instance Methods ---
 	
