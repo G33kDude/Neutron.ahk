@@ -648,7 +648,7 @@ class NeutronWindow
 		Gui, % this.hWnd ":" subCommand, %value1%, %value2%, %value3%
 	}
 	
-	; Changes the window aceent policy to ACCENT_ENABLE_GRADIENT
+	; Changes the window AccentState to ACCENT_ENABLE_GRADIENT
 	; and sets the specified fill color
 	SetWindowFillColor(colorHex:="000000")
 	{
@@ -662,7 +662,7 @@ class NeutronWindow
 		NumPut(16, &wcad, A_PtrSize+A_PtrSize, "Int")
 		DllCall("SetWindowCompositionAttribute", "UPtr", this.hWnd, "UPtr", &wcad)
 	}
-	
+
 	; --- Static Methods ---
 	
 	; Given an HTML Collection (or other JavaScript array), return an enumerator
