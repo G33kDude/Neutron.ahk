@@ -584,7 +584,7 @@ class NeutronWindow
 	}
 	
 	; Shows a hidden Neutron window.
-	Show(options:="")
+	Show(options:="",title:="")
 	{
 		w := RegExMatch(options, "w\s*\K\d+", match) ? match : this.w
 		h := RegExMatch(options, "h\s*\K\d+", match) ? match : this.h
@@ -602,7 +602,7 @@ class NeutronWindow
 		w += NumGet(&rect, 0, "Int")-NumGet(&rect, 8, "Int")
 		h += NumGet(&rect, 4, "Int")-NumGet(&rect, 12, "Int")
 		
-		Gui, % this.hWnd ":Show", %options% w%w% h%h%
+		Gui, % this.hWnd ":Show", %options% w%w% h%h%, %title%
 	}
 	
 	; Loads an HTML file by name (not path). When running the script uncompiled,
