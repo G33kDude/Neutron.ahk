@@ -65,6 +65,18 @@ class NeutronWindow
 		font-size: 11pt;
 	}
 
+	body .title-btn-restore {
+		display: none
+	}
+	
+	body.neutron-maximized .title-btn-restore {
+		display: block
+	}
+	
+	body.neutron-maximized .title-btn-maximize {
+		display: none
+	}
+
 	.title-btn:hover {
 		background: rgba(0, 0, 0, .2);
 	}
@@ -87,7 +99,8 @@ class NeutronWindow
 <header>
 	<span class='title-bar' onmousedown='neutron.DragTitleBar()'>{}</span>
 	<span class='title-btn' onclick='neutron.Minimize()'>0</span>
-	<span class='title-btn' onclick='neutron.Maximize()'>1</span>
+	<span class='title-btn title-btn-maximize' onclick='neutron.Maximize()'>1</span>
+	<span class='title-btn title-btn-restore' onclick='neutron.Maximize()'>2</span>
 	<span class='title-btn title-btn-close' onclick='neutron.Close()'>r</span>
 </header>
 
@@ -532,9 +545,17 @@ class NeutronWindow
 	Maximize()
 	{
 		if DllCall("IsZoomed", "UPtr", this.hWnd)
+		{
 			Gui, % this.hWnd ":Restore"
+			; remove this class from document body
+			this.qs("body").classList.remove("neutron-maximized")
+		}
 		else
+		{
 			Gui, % this.hWnd ":Maximize"
+			; add this class to document body
+			this.qs("body").classList.add("neutron-maximized")
+		}
 	}
 	
 	; Closes the Neutron window. Best used in your title bar's close
