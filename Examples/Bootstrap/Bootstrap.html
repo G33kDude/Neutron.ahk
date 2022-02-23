@@ -36,6 +36,18 @@
       font-size: 11pt;
     }
 
+    body .title-btn-restore {
+      display: none
+    }
+    
+    body.neutron-maximized .title-btn-restore {
+      display: block
+    }
+    
+    body.neutron-maximized .title-btn-maximize {
+      display: none
+    }
+
     .title-btn:hover {
       background: rgba(0, 0, 0, .2);
     }
@@ -53,7 +65,8 @@
     <div class="d-flex align-items-stretch bg-dark text-white">
       <span class="flex-grow-1 px-2 py-1" onmousedown="neutron.DragTitleBar()">AutoHotkey</span>
       <span class="title-btn" onclick="neutron.Minimize()">0</span>
-      <span class="title-btn" onclick="neutron.Maximize()">1</span>
+      <span class="title-btn title-btn-maximize" onclick="neutron.Maximize()">1</span>
+      <span class="title-btn title-btn-restore" onclick="neutron.Maximize()">2</span>
       <span class="title-btn title-btn-close" onclick="neutron.Close()">r</span>
     </div>
   </header>
