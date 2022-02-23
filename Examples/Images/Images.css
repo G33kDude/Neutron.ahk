@@ -32,6 +32,18 @@ header {
   font-size: 11pt;
 }
 
+body .title-btn-restore {
+  display: none
+}
+
+body.neutron-maximized .title-btn-restore {
+  display: block
+}
+
+body.neutron-maximized .title-btn-maximize {
+  display: none
+}
+
 .title-btn:hover {
   background: rgba(0, 0, 0, .2);
 }
