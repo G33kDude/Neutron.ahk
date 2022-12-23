@@ -1,5 +1,5 @@
 
-# Welcome to Neutron
+# Welcome to Neutron for AutoHotkey v2
 
 Neutron provides a powerful set of tools for build HTML-based user interfaces
 with AutoHotkey. It leverages the Trident engine, known for its use in Internet
@@ -29,58 +29,56 @@ The Neutron library is designed to be minimally invasive, easily included into
 existing scripts without major modifications. Neutron GUIs are created and
 managed similarly to native AutoHotkey GUIs.
 
-```ahk
+```ahk2
 ; --- Creating a GUI ---
 ; Traditional syntax:
-Gui, name:New,, title
-Gui, name:Add, ...
+name := Gui(options, title)
 ; Neutron syntax:
-name := new NeutronWindow("html", "css", "js", "title")
+name := NeutronWindow("html", "css", "js", "title")
 ; or
-name := new NeutronWindow("<!DOCTYPE html><html>full html document</html>")
+name := NeutronWindow("<!DOCTYPE html><html>full html document</html>")
 ; or
-name := new NeutronWindow()
-name.Load("file.html")
+name := NeutronWindow().Load("file.html")
 
 ; --- Giving Window Options ---
 ; Traditional syntax:
-Gui, name:+Option +Option
+name.Opt("+Option +Option")
 ; Neutron syntax:
-name.Gui("+Option +Option")
+name.Opt("+Option +Option")
 
 ; --- Showing the GUI ---
 ; Traditional syntax:
-Gui, name:Show, w800 h600
+name.Show("w800 h600")
 ; Neutron syntax:
 name.Show("w800 h600")
 
 ; --- Handling Events ---
 ; Traditional syntax:
-Gui, name:+LabelNamedGui
-return
-NamedGuiClose:
-NamedGuiEscape:
-NamedGuiDropFiles:
-MsgBox, Events!
-return
+name.OnEvent("Close", Handler)
+name.OnEvent("Escape", Handler)
+name.OnEvent("DropFiles", Handler)
+Handler(gui, p*) {
+	MsgBox "Events!"
+}
 ; Neutron syntax:
-name.Gui("+LabelNamedGui")
-return
-NamedGuiClose:
-NamedGuiEscape:
-NamedGuiDropFiles:
+name.OnEvent("Close", Handler)
+	.OnEvent("Escape", Handler)
+	.OnEvent("DropFiles", Handler)
 MsgBox, Events!
+Handler(gui, p*) {
+	MsgBox "Events!"
+}
 return
 
 ; --- Hiding the GUI ---
 ; Traditional syntax:
-Gui, name:Hide
+name.Hide()
 ; Neutron syntax:
 name.Hide()
 
 ; --- Destroying the GUI ---
 ; Traditional syntax:
-Gui, name:Destroy
+name.Destroy()
 ; Neutron syntax:
 name.Destroy()
 ```
@@ -95,22 +93,22 @@ The AHK function will receive any parameters passed by the JavaScript, with an
 extra "neutron" parameter passed in first that contains the Neutron instance
 that triggered the event.
 
-```ahk
-neutron := new NeutronWindow("<button onclick='ahk.Clicked(event)'>Hi</button>")
-neutron.Show()
+```ahk2
+neutron := NeutronWindow("<button onclick='ahk.Clicked(event)'>Hi</button>")
+	.Show()
 return
 
 Clicked(neutron, event)
 {
-    MsgBox, % "You clicked: " event.target.innerText
+    MsgBox "You clicked: " event.target.innerText
 }
 ```
 
 Neutron offers a number of shorthands and utility methods to make it easier to
 interact with the page from AutoHotkey. A non-exhaustive list of these is below:
 
-```ahk
-neutron := new NeutronWindow("<span>a</span><span>b</span><span>c</span>")
+```ahk2
+neutron := NeutronWindow("<span>a</span><span>b</span><span>c</span>")
 
 ; neutron.doc
 ; Equivalent to "document" in JS, used to access page contents
@@ -128,23 +126,23 @@ element := neutron.qs(".main span")
 ; Equivalent to "document.querySelectorAll" in JS
 elements := neutron.qsa(".main span")
 
-; neutron.Each(collection)
+; NeutronWindow.Each(collection)
 ; Allow enumeration of JS arrays / element collections
-for index, element in neutron.Each(elements)
+for index, element in NeutronWindow.Each(elements)
     MsgBox, % index ": " element.innerText
 
-; neutron.GetFormData(formElement)
+; NeutronWindow.GetFormData(formElement)
 ; More easily processing of form data
-formData := neutron.GetFormData(formElement)
+formData := NeutronWindow.GetFormData(formElement)
 MsgBox, % formData.fieldName ; Pull a single field
 for name, value in formData ; Iterate all fields
     MsgBox, %name%: %value%
 
 ; Escape values to place into HTML
-; neutron.EscapeHTML("unsafe text")
-neutron.qs(".main").innerHTML := "<div>" neutron.EscapeHTML("a<'&>z") "</div>"
-; neutron.FormatHTML("format string", "unsafe text 1", "unsafe text 2", ...)
-neutron.qs(".main").innerHTML := neutron.FormatHTML("<div>{}</div>", "a<'&>z")
+; NeutronWindow.EscapeHTML("unsafe text")
+neutron.qs(".main").innerHTML := "<div>" NeutronWindow.EscapeHTML("a<'&>z") "</div>"
+; NeutronWindow.FormatHTML("format string", "unsafe text 1", "unsafe text 2", ...)
+neutron.qs(".main").innerHTML := NeutronWindow.FormatHTML("<div>{}</div>", "a<'&>z")
 ```
 
 There's plenty more to be learned about Neutron from browsing its source and
@@ -181,7 +179,7 @@ Complexity: 2 / 5
 
 Complexity: 2 / 5
 
-> This example, while named Simple, is not the most simplistic example. Instead,
+> This example, while named Simple, is not the most simple example. Instead,
 > it is designed to demonstrate all of Neutron's built in behavior as a single
 > custom page. It is meant to be simple by comparison to other examples like the
 > Bootstrap example which demonstrate extending Neutron's functionality with
@@ -202,12 +200,14 @@ Complexity: 4 / 5
 > scripts first.
 
 ## Compiling Neutron Scripts
+
 Some Neutron scripts may require many dependencies, such as HTML, CSS, JS, SVG,
 and image files. Using one of the following methods, your Neutron script can 
 be compiled into a portable exe that contains all these dependencies internally,
 without needing to extract them to a temporary directory for use.
 
 ### A. Using compiler directives *(requires AutoHotkey v1.1.33+)*
+
 1. Add a `;@Ahk2Exe-AddResource *10 FileName` directive for each dependent file.
     * For example: `;@Ahk2Exe-AddResource *10 index.html`
     * Dependant files can be in any sub directory 
@@ -220,6 +220,7 @@ without needing to extract them to a temporary directory for use.
     `<img src="image.jpg">`
 
 ### B. Using FileInstall
+
 1. Any dependent files must be in the same directory as your AutoHotkey script
    file.
 2. Reference dependent files by name only, without any path portion.
@@ -227,9 +228,9 @@ without needing to extract them to a temporary directory for use.
    * In HTML: `<script src="index.js">`,
      `<link href="index.css" rel="stylesheet">`,
      `<img src="image.jpg">`
-3. Have a `FileInstall` for each dependent file somewhere in the script. Put this
-   somewhere that it won't be reached, such as just below the `return` after
-   your auto-execute section.
+3. Have a `FileInstall` for each dependent file somewhere in the script. Put
+   this somewhere that it won't be reached, such as just below the `return`
+   after your auto-execute section.
 
 When you do this, the dependent files will be saved into the EXE's RCDATA
 resources. Neutron's `Load()` method will detect when your script is compiled
