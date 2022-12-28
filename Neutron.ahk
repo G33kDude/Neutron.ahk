@@ -116,7 +116,7 @@ class NeutronWindow {
 
 	;#region Constants ---------------------------------------------------------
 
-	VERSION => "1.0.0"
+	VERSION => "1.0.1"
 
 	; Windows Messages
 	WM_DESTROY => 0x02
@@ -918,7 +918,7 @@ class NeutronWindow {
 		__Enum(numberOfVars) {
 			index := 0
 			return (&a, &b := unset) => (
-				(index < this.collection.length) ? False : (True,
+				(index > this.collection.length) ? False : (True,
 					a := index,
 					b := this.collection.item(index++)
 				)
