@@ -749,11 +749,6 @@ class NeutronWindow {
 	 * AutoHotkey, but with the first parameter changed from the `Gui` object to
 	 * the `NeutronWindow` object.
 	 * 
-	 * Example:
-	 * ```ahk2
-	 * neutron.OnEvent("Close", (neutron) => ExitApp())
-	 * ```
-	 * 
 	 * @param {String} eventName The name of the event
 	 * @param          callback  The callback to be run
 	 * @param {Int}    addRemove (Optional) Specifies call order or removes the
@@ -761,6 +756,9 @@ class NeutronWindow {
 	 *                           details
 	 * 
 	 * @return {NeutronWindow} The instance, for chaining
+	 * 
+	 * @example <caption>Exit AHK on Neutron close</caption>
+	 * neutron.OnEvent("Close", (neutron) => ExitApp())
 	 */
 	OnEvent(eventName, callback, addRemove := unset) {
 		this.gui.OnEvent(eventName, (p*) => (p[1] := this, callback(p*)), addRemove?)
@@ -898,17 +896,15 @@ class NeutronWindow {
 	 * Creates an enumerable object that will enumerate an HTML Collection
 	 * or other JavaScript array.
 	 * 
-	 * Example:
-	 * ```ahk2
+	 * @param collection The JavaScript array/collection to be enumerated
+	 * 
+	 * @return {NeutronWindow.Each}
+	 * 
+	 * @example <caption>Walk through the direct children of body</caption>
 	 * neutron := NeutronWindow("<body><p>A</p><p>B</p><p>C</p></body>")
 	 * neutron.Show()
 	 * for i, element in NeutronWindow.Each(neutron.body.children)
 	 *     MsgBox i ": " element.innerText
-	 * ```
-	 * 
-	 * @param collection The JavaScript array/collection to be enumerated
-	 * 
-	 * @return {NeutronWindow.Each}
 	 */
 	class Each {
 		__New(collection) {
@@ -949,8 +945,11 @@ class NeutronWindow {
 		/**
 		 * Get an array of all values associated with a name.
 		 * 
-		 * Example:
-		 * ```ahk2
+		 * @param {String} name The form field name associated with the values
+		 * 
+		 * @return {Array} The values associated with the name
+		 * 
+		 * @example <caption>Get all form values with key "foods"</caption>
 		 * fd := NeutronWindow.FormData()
 		 * fd.Add("foods", "hamburgers")
 		 * fd.Add("foods", "hotdogs")
@@ -961,11 +960,6 @@ class NeutronWindow {
 		 * for i, food in fd.All("foods")
 		 *     out .= i ": " food "`n"
 		 * MsgBox out
-		 * ```
-		 * 
-		 * @param {String} name The form field name associated with the values
-		 * 
-		 * @return {Array} of values
 		 */
 		All(name) {
 			values := []
@@ -979,13 +973,11 @@ class NeutronWindow {
 		 * Meta-function to allow direct access of field values using dot
 		 * notation.
 		 * 
-		 * Example:
-		 * ```ahk2
+		 * @example <caption>Get first value for key foods</caption>
 		 * fd := NeutronWindow.FormData()
 		 * fd.Add("foods", "hamburgers")
 		 * fd.Add("foods", "hotdogs")
 		 * MsgBox fd.foods ; hamburgers
-		 * ```
 		 */
 		__Get(name, params) {
 			return this[name]
@@ -996,14 +988,12 @@ class NeutronWindow {
 		 * notation. Can retrieve the nth item associated with a given name
 		 * by passing more than one value.
 		 * 
-		 * Example:
-		 * ```ahk2
+		 * @example <caption>Get first and second value for key foods</caption>
 		 * fd := Neutron.FormData()
 		 * fd.Add("foods", "hamburgers")
 		 * fd.Add("foods", "hotdogs")
 		 * MsgBox fd["foods"] ; hamburgers
 		 * MsgBox fd["foods", 2] ; hotdogs
-		 * ```
 		 */
 		__Item[name, n := 1] {
 			get {
@@ -1017,8 +1007,7 @@ class NeutronWindow {
 		 * Allow iteration in the order fields were added, instead of a normal
 		 * object's alphanumeric order of iteration.
 		 * 
-		 * Example:
-		 * ```ahk2
+		 * @example <caption>Iterate through all form values in order</caption>
 		 * fd := NeutronWindow.FormData()
 		 * fd.Add("z", "3")
 		 * fd.Add("y", "2")
@@ -1026,7 +1015,6 @@ class NeutronWindow {
 		 * for name, field in fd
 		 *     out .= name ": " field ","
 		 * MsgBox out ; z: 3, y: 2, x: 1
-		 * ```
 		 */
 		__Enum(NumberOfVars) {
 			i := 0
