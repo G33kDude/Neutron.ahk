@@ -718,9 +718,9 @@ class NeutronWindow {
 	 */
 	Load(fileName) {
 		; Complete the path based on compiled state
-		if A_IsCompiled
-			url := "res://" this.wnd.encodeURIComponent(A_ScriptFullPath) "/10/" fileName
-		else
+		if A_IsCompiled {
+			url := "res://" A_ScriptFullPath "/10/" fileName
+		} else
 			url := A_WorkingDir "/" fileName
 
 		; Navigate to the calculated file URL
