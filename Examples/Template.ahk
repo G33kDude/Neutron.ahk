@@ -2,20 +2,20 @@
 	This example is designed to show how to use the default Neutron template
 	page. Because it uses the default template, it is also the simplest example
 	to use and tweak as a beginner.
-	
+
 	It is also designed to show how you would apply your own theming to the
 	template without having to modify it directly, by applying CSS styling to
 	the built-in template title bar elements.
 */
 
-#NoEnv
-SetBatchLines, -1
-CoordMode, Mouse, Screen
+#Requires AutoHotkey v2.0
+
+CoordMode "Mouse", "Screen"
 
 ; Include the Neutron library
 #Include ../Neutron.ahk
 
-html =
+html := "
 ( ; html
 	<h1>Welcome to Neutron!</h1>
 
@@ -54,9 +54,9 @@ html =
 	<p>
 		Your mouse is at <span id="ahk_x">0</span>, <span id="ahk_y">0</span>.
 	</p>
-)
+)"
 
-css =
+css := "
 ( ; css
 	/* Make the title bar dark with light text */
 	header {
@@ -89,74 +89,60 @@ css =
 		padding: 0.25em 0.5em;
 		border-radius: 0.25em;
 	}
-)
+)"
 
-js =
+js := "
 ( ; js
 	// Write some JavaScript here
-)
+)"
 
-title = Neutron Template Example
+title := "Neutron Template Example"
 
 ; Create a Neutron Window with the given content and save a reference to it in
 ; the variable `neutron` to be used later.
-neutron := new NeutronWindow(html, css, js, title)
-
-; Use the Gui method to set a custom label prefix for GUI events. This code is
-; equivalent to the line `Gui, name:+LabelNeutron` for a normal GUI.
-neutron.Gui("+LabelNeutron")
-
-; Show the GUI, with an initial size of 640 x 480. Unlike with a normal GUI
-; this size includes the title bar area, so the "client" area will be slightly
-; shorter vertically than if you were to make this GUI the normal way.
-neutron.Show("w640 h480")
+neutron := NeutronWindow(html, css, js, title)
+	.OnEvent("Close", (neutron) => ExitApp())
+	; Show the GUI, with an initial size of 640 x 480. Unlike with a normal GUI
+	; this size includes the title bar area, so the "client" area will be
+	; slightly shorter vertically than if you were to make this GUI the normal
+	; way.
+	.Show("w640 h480", "Template")
 
 ; Set up a timer to demonstrate making dynamic page updates every so often.
-SetTimer, DynamicContent, 100
-return
-
-; The built in GuiClose, GuiEscape, and GuiDropFiles event handlers will work
-; with Neutron GUIs. Using them is the current best practice for handling these
-; types of events. Here, we're using the name NeutronClose because the GUI was
-; given a custom label prefix up in the auto-execute section.
-NeutronClose:
-ExitApp
+SetTimer(DynamicContent, 100)
 return
 
 
-Clicked(neutron, event)
-{
+Clicked(neutron, event) {
 	; event.target will contain the HTML Element that fired the event.
 	; Show a message box with its inner text.
-	MsgBox, % "You clicked: " event.target.innerText
+	MsgBox "You clicked: " event.target.innerText
 }
 
-Submitted(neutron, event)
-{
+Submitted(neutron, event) {
 	; Some events have a default action that needs to be prevented. A form will
 	; redirect the page by default, but we want to handle the form data ourself.
 	event.preventDefault()
-	
+
 	; Dismiss the GUI
 	neutron.hide()
-	
+
 	; Use the GetFormData helper to get an associative array of the form data
-	formData := neutron.GetFormData(event.target)
-	MsgBox, % "Hello " formData.firstName " " formData.lastName "!"
-	
+	formData := NeutronWindow.GetFormData(event.target)
+	MsgBox "Hello " formData.firstName " " formData.lastName "!"
+
 	; Re-show the GUI
 	neutron.Show()
 }
 
-DynamicContent()
-{
+DynamicContent() {
 	; This function isn't called by Neutron, so we'll have to grab the global
 	; Neutron window variable instead of using one from a Neutron event.
 	global neutron
-	
+
 	; Get the mouse position
-	MouseGetPos, x, y
-	
+	MouseGetPos(&x, &y)
+
 	; Update the page with the new position
 	neutron.doc.getElementById("ahk_x").innerText := x
 	neutron.doc.getElementById("ahk_y").innerText := y
