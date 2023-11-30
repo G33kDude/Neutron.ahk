@@ -630,7 +630,7 @@ class NeutronWindow
 	{
 		; Complete the path based on compiled state
 		if A_IsCompiled
-			url := "res://" this.wnd.encodeURIComponent(A_ScriptFullPath) "/10/" fileName
+			url := "res://" this.EncodeUri(A_ScriptFullPath) "/10/" fileName
 		else
 			url := A_WorkingDir "/" fileName
 		
@@ -776,6 +776,33 @@ class NeutronWindow
 		unsafe := StrReplace(unsafe, """", "&quot;")
 		unsafe := StrReplace(unsafe, "''", "&#039;")
 		return unsafe
+	}
+
+	; Encodes reserved uri characters
+	; https://developer.mozilla.org/en-US/docs/Glossary/Percent-encoding
+	EncodeUri(uri)
+	{
+		uri := StrReplace(uri, "%", "%25")
+		uri := StrReplace(uri, ":", "%3A")
+		uri := StrReplace(uri, "/", "%2F")
+		uri := StrReplace(uri, "?", "%3F")
+		uri := StrReplace(uri, "#", "%23")
+		uri := StrReplace(uri, "[", "%5B")
+		uri := StrReplace(uri, "]", "%5D")
+		uri := StrReplace(uri, "@", "%40")
+		uri := StrReplace(uri, "!", "%21")
+		uri := StrReplace(uri, "$", "%24")
+		uri := StrReplace(uri, "&", "%26")
+		uri := StrReplace(uri, "'", "%27")
+		uri := StrReplace(uri, "(", "%28")
+		uri := StrReplace(uri, ")", "%29")
+		uri := StrReplace(uri, "*", "%2A")
+		uri := StrReplace(uri, "+", "%2B")
+		uri := StrReplace(uri, ",", "%2C")
+		uri := StrReplace(uri, ";", "%3B")
+		uri := StrReplace(uri, "=", "%3D")
+		uri := StrReplace(uri, " ", "%20")
+		return uri
 	}
 	
 	; Wrapper for Format that applies EscapeHTML to each value before passing
