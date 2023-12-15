@@ -29,7 +29,7 @@ The Neutron library is designed to be minimally invasive, easily included into
 existing scripts without major modifications. Neutron GUIs are created and
 managed similarly to native AutoHotkey GUIs.
 
-```ahk2
+```ahk
 ; --- Creating a GUI ---
 ; Traditional syntax:
 name := Gui(options, title)
@@ -93,7 +93,7 @@ The AHK function will receive any parameters passed by the JavaScript, with an
 extra "neutron" parameter passed in first that contains the Neutron instance
 that triggered the event.
 
-```ahk2
+```ahk
 neutron := NeutronWindow("<button onclick='ahk.Clicked(event)'>Hi</button>")
 	.Show()
 return
